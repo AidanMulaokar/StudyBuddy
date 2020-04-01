@@ -1,0 +1,33 @@
+.homePage {
+    display: none;
+    position: fixed;
+    width: 600px;
+    height: 350px;
+    left: calc(50% - 300px);
+    top: calc(50% - 175px);
+    fill: white;
+    border: 3px solid #f1f1f1;
+    background-color: white;
+    z-index: 9;
+    border-radius: 10px;
+}
+
+#posts {
+    list-style: none;
+    width: 550px;
+    height: 300px;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+.post {
+    position: relative;
+    display:block;
+    border-bottom: thin solid lightgray;
+}
+
+.postTitle {
+    background-color: black;
+    color: white;
+    display:block;
+}

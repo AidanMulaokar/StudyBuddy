@@ -1,0 +1,13 @@
+#Post {
+    display: none;
+    position: fixed;
+    width: 600px;
+    height: 350px;
+    left: calc(50% - 300px);
+    top: calc(50% - 175px);
+    fill: white;
+    border: 3px solid #f1f1f1;
+    background-color: white;
+    z-index: 9;
+    border-radius: 10px;
+}
