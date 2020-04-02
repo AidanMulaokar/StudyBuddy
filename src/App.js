@@ -20,10 +20,11 @@ class App extends React.Component {
             this.state.posts.push(doc.data())
         })
     });
+    this.updateUser = this.updateUser.bind(this);
   }
 
   updateUser = (currUser) => {
-    this.setState({user: currUser})
+    this.setState({user: currUser});
   }
   
   updatePosts = () => {

@@ -20,7 +20,7 @@ class Post extends React.Component {
     }
 
     static getDerivedStateFromProps(props, state) {
-        if (props.user && state.user && props.user.uid !== state.user.uid) {
+        if (props.user && state.user && props.user.id !== state.user.id) {
             console.log(props.user.id);
             return {
                     user: props.user,
@@ -97,6 +97,8 @@ class Post extends React.Component {
     }
 
     render() {
+        console.log("Profile rerendered");
+        console.log(this.state.username);
         return(
             <div className = "profile" id="Profile">
               <input type="file" onChange={this.handleChange}/>

@@ -55,6 +55,7 @@ class Login extends React.Component {
                     document = doc.data();
                 }
             });
+            console.log(firebaseApp.auth().currentUser.email);
             this.props.login(document);
             this.props.openHome();
         })

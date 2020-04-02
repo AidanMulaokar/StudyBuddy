@@ -31,6 +31,7 @@ class Home extends React.Component {
     render() {
         console.log("Home has rerendered");
         return(
+            <div>
             <div className = "homePage" id="HomePage">
                 <button onClick={this.props.openProfile}>Profile</button>
                 <button onClick={this.props.openPost}>Post</button>
@@ -46,6 +47,10 @@ class Home extends React.Component {
                         )
                     }
                 </ul>
+            </div>
+            <div id = "friendsList">
+
+            </div>
             </div>
         );
     }
