@@ -34,6 +34,7 @@ class Home extends React.Component {
             <div className = "homePage" id="HomePage">
                 <button onClick={this.props.openProfile}>Profile</button>
                 <button onClick={this.props.openPost}>Post</button>
+                <button onClick={this.props.signOut}>Sign Out</button>
                 <ul id="posts">
                     {
                         this.state.posts.map( (each) => 

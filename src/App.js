@@ -38,11 +38,19 @@ class App extends React.Component {
     });
   }
 
+  signOut = async () => {
+    await firebaseApp.auth().signOut().then( () => {
+      this.setState({user: firebaseApp.auth().currentUser});
+    })
+
+    this.signout();
+  }
+
   render() {
     return(
       console.log(this.state.backgroundImage.fullPath),
       <div id= "main" style={{backgroundImage: 'url('+this.state.backgroundImage.fullPath+')' }}>
-        <Home posts = {this.state.posts} openPost = {this.openPost} openProfile = {this.openProfile}/>
+        <Home signOut={this.signOut} posts = {this.state.posts} openPost = {this.openPost} openProfile = {this.openProfile}/>
         <Login login = {this.updateUser} openHome = {this.openHome}/>
         <Post user={this.state.user} updatePost = {this.updatePosts}/>
         <Profile user = {this.state.user} updateUser = {this.updateUser}/>
@@ -51,7 +59,21 @@ class App extends React.Component {
     )
   };
 
-
+  signout() {
+    console.log(this.state.user);
+    if(document.getElementById("HomePage")) {
+      document.getElementById("HomePage").style.display = "none";
+    }
+    if(document.getElementById("Post")) {
+      document.getElementById("Post").style.display = "none";
+    }
+    if(document.getElementById("Profile")) {
+      document.getElementById("Profile").style.display = "none";
+    }
+    if(document.getElementById("loginform")) {
+      document.getElementById("loginform").style.display = "block";
+    }
+  }
 
   openHome() {
     console.log("Open Home");
