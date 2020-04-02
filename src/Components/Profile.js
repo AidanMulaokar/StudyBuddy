@@ -103,7 +103,7 @@ class Post extends React.Component {
             <div className = "profile" id="Profile">
               <input type="file" onChange={this.handleChange}/>
                 <button onClick={this.handleUpload}>Upload Image</button>
-                <img src = {this.state.url} alt="Profile Pic" height="300" width="400"/>
+                <img src = {this.state.url} alt="Profile Pic" height="100" width="100"/>
                 <button onClick={this.edit}>Edit</button>
                 <form id="profileForm" onSubmit={e=>this.editUser(e)}>
                     <label>Username</label>

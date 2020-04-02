@@ -12,8 +12,17 @@ class App extends React.Component {
     this.state = {
       user: null,
       posts: [],
+      users: [],
       backgroundImage: firebaseApp.storage().ref().child('images/resources/GT_Tower.png')
     }
+    //Get all users
+    firestore.collection('students').get()
+    .then((snapshot) => {
+        snapshot.docs.forEach( doc => {
+            this.state.users.push(doc.data())
+        })
+    });
+    //Get all posts 
     firestore.collection('posts').get()
     .then((snapshot) => {
         snapshot.docs.forEach( doc => {
@@ -39,6 +48,19 @@ class App extends React.Component {
     });
   }
 
+  updateUsers = () => {
+    console.log("updating users");
+    var newusers = [];
+    firestore.collection('posts').get()
+    .then((snapshot) => {
+        snapshot.docs.forEach( doc => {
+            newusers.push(doc.data())
+        })
+        this.setState({users: newusers});
+    });
+  }
+
+
   signOut = async () => {
     await firebaseApp.auth().signOut().then( () => {
       this.setState({user: firebaseApp.auth().currentUser});
@@ -51,7 +73,7 @@ class App extends React.Component {
     return(
       console.log(this.state.backgroundImage.fullPath),
       <div id= "main" style={{backgroundImage: 'url('+this.state.backgroundImage.fullPath+')' }}>
-        <Home signOut={this.signOut} posts = {this.state.posts} openPost = {this.openPost} openProfile = {this.openProfile}/>
+        <Home users = {this.state.users} signOut={this.signOut} posts = {this.state.posts} openPost = {this.openPost} openProfile = {this.openProfile}/>
         <Login login = {this.updateUser} openHome = {this.openHome}/>
         <Post user={this.state.user} updatePost = {this.updatePosts}/>
         <Profile user = {this.state.user} updateUser = {this.updateUser}/>
@@ -79,11 +101,16 @@ class App extends React.Component {
   openHome() {
     console.log("Open Home");
     if(document.getElementById("HomePage")) {
-      closeLogin();
       console.log("opening home");
       document.getElementById("HomePage").style.display = "block";
       //document.getElementById("shadow").style.display = "block";
     }
+    if(document.getElementById("friendsList")) {
+      console.log("opening friendsList");
+      document.getElementById("friendsList").style.display = "block";
+      //document.getElementById("shadow").style.display = "block";
+    }
+    closeLogin();
   }
 
   openPost() {

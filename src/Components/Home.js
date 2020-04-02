@@ -9,6 +9,7 @@ class Home extends React.Component {
         super(props);
         this.state = {
             posts: this.props.posts,
+            users: this.props.users
         }
 
     }
@@ -18,11 +19,13 @@ class Home extends React.Component {
             //console.log(props.posts);
             return {
                     posts: props.posts,
+                    users: props.users,
             };
         } else if (props.posts && !state.posts){
             //console.log(props.posts);
             return {
                 posts: props.posts,
+                users: props.users,
             };
         }
         return null;
@@ -30,6 +33,7 @@ class Home extends React.Component {
 
     render() {
         console.log("Home has rerendered");
+        console.log(this.state.users)
         return(
             <div>
             <div className = "homePage" id="HomePage">
@@ -49,7 +53,17 @@ class Home extends React.Component {
                 </ul>
             </div>
             <div id = "friendsList">
-
+            <ul id="friends">
+                    {
+                        this.state.users.map( (each) => 
+                            <li className = "friend" key={keyIndex++}>
+                                <p className = "friendUsername"><img src = {each.profileURL} alt="Profile Pic" height="50" width="50"/>{each.username}</p>
+                                <p className="friendName">{each.name}</p>
+                                <p className="friendMajor">{each.major}</p>
+                            </li>
+                        )
+                    }
+                </ul>
             </div>
             </div>
         );
