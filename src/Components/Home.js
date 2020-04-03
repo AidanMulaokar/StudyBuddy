@@ -1,5 +1,6 @@
 import React from 'react';
 import '../Css/Home.css';
+import { firestore } from '../Resources/Firebase.js';
 //import {firebaseApp} from '../Resources/Firebase.js';
 
 var keyIndex = 0;
@@ -9,7 +10,10 @@ class Home extends React.Component {
         super(props);
         this.state = {
             posts: this.props.posts,
-            users: this.props.users
+            users: this.props.users,
+            user: this.props.user,
+            friendsList: [],
+            friends: this.props.friends
         }
 
     }
@@ -20,20 +24,41 @@ class Home extends React.Component {
             return {
                     posts: props.posts,
                     users: props.users,
+                    user: props.user,
+                    friendsList: props.user.friendsList,
+                    friends: props.friends
             };
         } else if (props.posts && !state.posts){
             //console.log(props.posts);
             return {
                 posts: props.posts,
                 users: props.users,
+                user: props.user,
+                friendsList: props.user.friendsList,
+                friends: props.friends
             };
         }
         return null;
     }
 
+    addFriend(id) {
+        var friendslist = this.state.user.friendsList;
+        var friend;
+        var friendid = this.state.user.id;
+        firestore.collection('students').doc(id).get().then(function(doc) {
+            if(doc.exists) {
+                friend = doc.data().id;
+                friendslist.push(friend);
+                firestore.collection('students').doc(friendid).update({friendsList: friendslist});
+            }
+        });
+    }
+
+
     render() {
         console.log("Home has rerendered");
         console.log(this.state.users)
+        console.log(this.state.friends);
         return(
             <div>
             <div className = "homePage" id="HomePage">
@@ -42,7 +67,7 @@ class Home extends React.Component {
                 <button onClick={this.props.signOut}>Sign Out</button>
                 <ul id="posts">
                     {
-                        this.state.posts.map( (each) => 
+                        this.state.posts.map( (each) =>
                             <li className = "post" key={keyIndex++}>
                                 <p className = "postTitle">{each.title}</p>
                                 <p className="postUser">{each.user}</p>
@@ -52,14 +77,31 @@ class Home extends React.Component {
                     }
                 </ul>
             </div>
+            <button id="usersBtn" onClick={this.openUsers}>Users</button>
+            <button id="friendsBtn" onClick={this.openFriends}>Friends</button>
             <div id = "friendsList">
             <ul id="friends">
                     {
-                        this.state.users.map( (each) => 
+                        this.state.friends.map( (each) => 
                             <li className = "friend" key={keyIndex++}>
                                 <p className = "friendUsername"><img src = {each.profileURL} alt="Profile Pic" height="50" width="50"/>{each.username}</p>
                                 <p className="friendName">{each.name}</p>
                                 <p className="friendMajor">{each.major}</p>
+                                <button onClick={() => this.removeFriend(each.id)}>Remove Friend</button>
+                            </li>
+                        )
+                    }
+                </ul>
+            </div>
+            <div id = "usersList">
+            <ul id="users">
+                    {
+                        this.state.users.map( (each) => 
+                            <li className = "user" key={keyIndex++}>
+                                <p className = "userUsername"><img src = {each.profileURL} alt="Profile Pic" height="50" width="50"/>{each.username}</p>
+                                <p className="userName">{each.name}</p>
+                                <p className="userMajor">{each.major}</p>
+                                <button onClick={() => this.addFriend(each.id)}>Add Friend</button>
                             </li>
                         )
                     }
@@ -67,6 +109,15 @@ class Home extends React.Component {
             </div>
             </div>
         );
+    }
+    openFriends() {
+        document.getElementById("usersList").style.display = "none";
+        document.getElementById("friendsList").display = "block";
+    }
+
+    openUsers() {
+        document.getElementById("usersList").style.display = "block";
+        document.getElementById("friendsList").display = "none";
     }
 }
 export default Home;

@@ -75,6 +75,7 @@ class Login extends React.Component {
                 username: this.state.username,
                 major: this.state.major,
                 profileURL: '',
+                friendsList: [],
                 id: firebaseApp.auth().currentUser.uid
             })
         })

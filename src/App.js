@@ -13,15 +13,11 @@ class App extends React.Component {
       user: null,
       posts: [],
       users: [],
+      friends: [],
       backgroundImage: firebaseApp.storage().ref().child('images/resources/GT_Tower.png')
     }
-    //Get all users
-    firestore.collection('students').get()
-    .then((snapshot) => {
-        snapshot.docs.forEach( doc => {
-            this.state.users.push(doc.data())
-        })
-    });
+    console.log("***" + this.state.user)
+
     //Get all posts 
     firestore.collection('posts').get()
     .then((snapshot) => {
@@ -29,11 +25,20 @@ class App extends React.Component {
             this.state.posts.push(doc.data())
         })
     });
-    this.updateUser = this.updateUser.bind(this);
+    //this.updateUser = this.updateUser.bind(this);
   }
 
-  updateUser = (currUser) => {
+  /**TODO: Fix issues with this, temp solution is inefficient */
+  updateUser = async (currUser) => {
+    console.log("!!! updating users");
     this.setState({user: currUser});
+     //Want this to cause re-render
+     this.updateUsers();
+     this.updateFriends();
+     //Not sure why but this is the only function 
+     //that is causing component re-render
+     console.log(this.state.friends);
+     this.updatePosts();
   }
   
   updatePosts = () => {
@@ -51,13 +56,28 @@ class App extends React.Component {
   updateUsers = () => {
     console.log("updating users");
     var newusers = [];
-    firestore.collection('posts').get()
+    firestore.collection('students').get()
     .then((snapshot) => {
         snapshot.docs.forEach( doc => {
-            newusers.push(doc.data())
+          if(doc.data().id !== this.state.user.id) {
+            newusers.push(doc.data());
+          }
         })
         this.setState({users: newusers});
     });
+  }
+
+  updateFriends = () => {
+    var friendslist = [];
+    this.state.user.friendsList.forEach(friend => {
+      firestore.collection('students').doc(friend).get()
+      .then(function(doc) {
+          if(doc.exists) {
+              friendslist.push(doc.data());
+          }
+      })
+  });
+    this.setState({friends: friendslist});
   }
 
 
@@ -73,7 +93,7 @@ class App extends React.Component {
     return(
       console.log(this.state.backgroundImage.fullPath),
       <div id= "main" style={{backgroundImage: 'url('+this.state.backgroundImage.fullPath+')' }}>
-        <Home users = {this.state.users} signOut={this.signOut} posts = {this.state.posts} openPost = {this.openPost} openProfile = {this.openProfile}/>
+        <Home friends = {this.state.friends} user={this.state.user} users = {this.state.users} signOut={this.signOut} posts = {this.state.posts} openPost = {this.openPost} openProfile = {this.openProfile}/>
         <Login login = {this.updateUser} openHome = {this.openHome}/>
         <Post user={this.state.user} updatePost = {this.updatePosts}/>
         <Profile user = {this.state.user} updateUser = {this.updateUser}/>
@@ -109,6 +129,12 @@ class App extends React.Component {
       console.log("opening friendsList");
       document.getElementById("friendsList").style.display = "block";
       //document.getElementById("shadow").style.display = "block";
+    }
+    if(document.getElementById("usersBtn")) {
+      document.getElementById("usersBtn").style.display = "block";
+    }
+    if(document.getElementById("friendsBtn")) {
+      document.getElementById("friendsBtn").style.display = "block";
     }
     closeLogin();
   }
