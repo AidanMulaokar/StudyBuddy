@@ -21,18 +21,42 @@ class Home extends React.Component {
     static getDerivedStateFromProps(props, state) {
         if (props.posts && state.posts && props.posts !== state.posts) {
             //console.log(props.posts);
+            var notFriends = [];
+            props.users.forEach((user) => {
+                var notFriend = true;
+                props.friends.forEach((friend) => {
+                    if(friend.id === user.id) {
+                        notFriend = false;
+                    }
+                })
+                if(notFriend) {
+                    notFriends.push(user);
+                }
+            })
             return {
                     posts: props.posts,
-                    users: props.users,
+                    users: notFriends,
                     user: props.user,
                     friendsList: props.user.friendsList,
                     friends: props.friends
             };
         } else if (props.posts && !state.posts){
             //console.log(props.posts);
+            var notFriends = [];
+            props.users.forEach((user) => {
+                var notFriend = true;
+                props.friends.forEach((friend) => {
+                    if(friend.id === user.id) {
+                        notFriend = false;
+                    }
+                })
+                if(notFriend) {
+                    notFriends.push(user);
+                }
+            })
             return {
                 posts: props.posts,
-                users: props.users,
+                users: notFriends,
                 user: props.user,
                 friendsList: props.user.friendsList,
                 friends: props.friends
