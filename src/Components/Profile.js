@@ -21,7 +21,7 @@ class Post extends React.Component {
 
     static getDerivedStateFromProps(props, state) {
         if (props.user && state.user && props.user.id !== state.user.id) {
-            console.log(props.user.id);
+            //console.log(props.user.id);
             return {
                     user: props.user,
                     url: props.user.profileURL,
@@ -31,7 +31,7 @@ class Post extends React.Component {
                     disabled: true
             };
         } else if (props.user && !state.user){
-            console.log(props.user.id);
+            //console.log(props.user.id);
             return {
                 user: props.user,
                 url: props.user.profileURL,
@@ -63,7 +63,7 @@ class Post extends React.Component {
         },
         () => {
             firebaseApp.storage().ref('images/users/').child(this.state.user.id + "profilepic").getDownloadURL().then(newurl => {
-                console.log(newurl);
+                //console.log(newurl);
                 firestore.collection('students').doc(this.state.user.id).update({
                     profileURL: newurl
                 });
@@ -97,8 +97,8 @@ class Post extends React.Component {
     }
 
     render() {
-        console.log("Profile rerendered");
-        console.log(this.state.username);
+        //console.log("Profile rerendered");
+        //console.log(this.state.username);
         return(
             <div className = "profile" id="Profile">
               <input type="file" onChange={this.handleChange}/>
@@ -124,7 +124,7 @@ class Post extends React.Component {
     }
 
     edit() {
-        console.log("edit");
+        //console.log("edit");
         if(document.getElementById("profileElement1").disabled) {
             document.getElementById("profileElement1").disabled = false;
             document.getElementById("profileElement2").disabled = false;
@@ -140,7 +140,7 @@ class Post extends React.Component {
         }
     }
     closeProfile() {
-        console.log("closeProfile");
+        //console.log("closeProfile");
         document.getElementById("Profile").style.display = "none";
         document.getElementById("profileElement1").disabled = true;
         document.getElementById("profileElement2").disabled = true;

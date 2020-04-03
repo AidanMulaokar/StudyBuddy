@@ -43,7 +43,7 @@ class Post extends React.Component {
         var post = {
             message: this.state.message,
             title: this.state.title,
-            user: this.state.user.id,
+            user: this.state.user,
         }
         firestore.collection('posts').add(post);
         this.props.updatePost();

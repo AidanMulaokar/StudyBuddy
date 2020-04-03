@@ -16,7 +16,7 @@ class App extends React.Component {
       friends: [],
       backgroundImage: firebaseApp.storage().ref().child('images/resources/GT_Tower.png')
     }
-    console.log("***" + this.state.user)
+    //console.log("***" + this.state.user)
 
     //Get all posts 
     firestore.collection('posts').get()
@@ -30,19 +30,26 @@ class App extends React.Component {
 
   /**TODO: Fix issues with this, temp solution is inefficient */
   updateUser = async (currUser) => {
-    console.log("!!! updating users");
+    console.log("UPDATE USER");
+    //console.log("!!! updating users");
     this.setState({user: currUser});
+
+    console.log("UPDATE USERS");
      //Want this to cause re-render
      this.updateUsers();
+
+     console.log("UPDATE FRIENDS");
      this.updateFriends();
+
      //Not sure why but this is the only function 
      //that is causing component re-render
-     console.log(this.state.friends);
+     //console.log("UPDATE USER" + this.state.friends);
+     console.log("UPDATE POSTS");
      this.updatePosts();
   }
   
   updatePosts = () => {
-    console.log("updating posts");
+    //console.log("updating posts");
     var newposts = [];
     firestore.collection('posts').get()
     .then((snapshot) => {
@@ -54,11 +61,12 @@ class App extends React.Component {
   }
 
   updateUsers = () => {
-    console.log("updating users");
+    //console.log("updating users");
     var newusers = [];
     firestore.collection('students').get()
     .then((snapshot) => {
         snapshot.docs.forEach( doc => {
+          //console.log("UPDATE USERS:" + doc);
           if(doc.data().id !== this.state.user.id) {
             newusers.push(doc.data());
           }
@@ -69,11 +77,13 @@ class App extends React.Component {
 
   updateFriends = () => {
     var friendslist = [];
-    this.state.user.friendsList.forEach(friend => {
+    console.log(this.state.user.friendsList);
+    this.state.user.friendsList.forEach((friend) => {
       firestore.collection('students').doc(friend).get()
       .then(function(doc) {
           if(doc.exists) {
               friendslist.push(doc.data());
+              console.log("NEW FRIENDS LIST" + friendslist.values())
           }
       })
   });
@@ -90,10 +100,11 @@ class App extends React.Component {
   }
 
   render() {
+    //console.log("APP RENDER")
     return(
-      console.log(this.state.backgroundImage.fullPath),
+      //console.log(this.state.backgroundImage.fullPath),
       <div id= "main" style={{backgroundImage: 'url('+this.state.backgroundImage.fullPath+')' }}>
-        <Home friends = {this.state.friends} user={this.state.user} users = {this.state.users} signOut={this.signOut} posts = {this.state.posts} openPost = {this.openPost} openProfile = {this.openProfile}/>
+        <Home update={this.updateUser} friends = {this.state.friends} user={this.state.user} users = {this.state.users} signOut={this.signOut} posts = {this.state.posts} openPost = {this.openPost} openProfile = {this.openProfile}/>
         <Login login = {this.updateUser} openHome = {this.openHome}/>
         <Post user={this.state.user} updatePost = {this.updatePosts}/>
         <Profile user = {this.state.user} updateUser = {this.updateUser}/>
@@ -119,14 +130,14 @@ class App extends React.Component {
   }
 
   openHome() {
-    console.log("Open Home");
+    //console.log("Open Home");
     if(document.getElementById("HomePage")) {
-      console.log("opening home");
+      //console.log("opening home");
       document.getElementById("HomePage").style.display = "block";
       //document.getElementById("shadow").style.display = "block";
     }
     if(document.getElementById("friendsList")) {
-      console.log("opening friendsList");
+      //console.log("opening friendsList");
       document.getElementById("friendsList").style.display = "block";
       //document.getElementById("shadow").style.display = "block";
     }
@@ -140,9 +151,9 @@ class App extends React.Component {
   }
 
   openPost() {
-    console.log("Open Post");
+    //console.log("Open Post");
     if(document.getElementById("Post")) {
-      console.log("opening post");
+      //console.log("opening post");
       document.getElementById("Post").style.display = "block";
       //document.getElementById("shadow").style.display = "block";
     }
@@ -159,7 +170,7 @@ class App extends React.Component {
 
 function closeLogin() {
   if(document.getElementById("loginform")) {
-    console.log("closing login");
+    //console.log("closing login");
     document.getElementById("loginform").style.display = "none";
   }
 }

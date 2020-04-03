@@ -5,6 +5,7 @@ import { firestore } from '../Resources/Firebase.js';
 
 var keyIndex = 0;
 
+/*TODO: Fix jank way that friendslist is updated and re-rendered*/
 class Home extends React.Component {
     constructor(props) {
         super(props);
@@ -20,6 +21,7 @@ class Home extends React.Component {
 
     static getDerivedStateFromProps(props, state) {
         if (props.posts && state.posts && props.posts !== state.posts) {
+            console.log("GDSFP 1");
             //console.log(props.posts);
             var notFriends = [];
             props.users.forEach((user) => {
@@ -42,7 +44,8 @@ class Home extends React.Component {
             };
         } else if (props.posts && !state.posts){
             //console.log(props.posts);
-            var notFriends = [];
+            //var notFriends = [];
+            console.log("GDSFP 2");
             props.users.forEach((user) => {
                 var notFriend = true;
                 props.friends.forEach((friend) => {
@@ -65,23 +68,55 @@ class Home extends React.Component {
         return null;
     }
 
-    addFriend(id) {
+    async addFriend(id) {
         var friendslist = this.state.user.friendsList;
         var friend;
         var friendid = this.state.user.id;
-        firestore.collection('students').doc(id).get().then(function(doc) {
+        await firestore.collection('students').doc(id).get().then(function(doc) {
             if(doc.exists) {
                 friend = doc.data().id;
                 friendslist.push(friend);
                 firestore.collection('students').doc(friendid).update({friendsList: friendslist});
             }
         });
+        //this.state.user.friendsList = friendslist;
+        this.setState({friendsList: friendslist,
+        friends: friendslist})
+        this.props.update(this.state.user);
+    }
+
+    async removeFriend(id) {
+        console.log("REMOVE: " + id);
+        var friendslist = this.state.friends;
+        console.log(friendslist);
+        var newFriends = [];
+        var newIDs = [];
+        var newUsers = [];
+        friendslist.forEach((friend) => {
+            if(friend.id !== id) {
+                newFriends.push(friend)
+                newIDs.push(friend.id)
+            } else {
+                newUsers.push(friend)
+            }
+        });
+        console.log(newFriends);
+        newUsers = newUsers.concat(this.state.users);
+        //this.state.user.friendsList = newFriends;
+        await firestore.collection('students').doc(this.state.user.id).update({friendsList: newFriends});
+        this.setState({friendsList: newIDs,
+            friends: newFriends,
+            users: newUsers});
+        this.state.user.friendsList = newIDs;
+        this.props.update(this.state.user);
+
     }
 
 
     render() {
         console.log("Home has rerendered");
-        console.log(this.state.users)
+        console.log(this.state.users);
+        console.log(this.state.friendsList);
         console.log(this.state.friends);
         return(
             <div>
@@ -93,8 +128,8 @@ class Home extends React.Component {
                     {
                         this.state.posts.map( (each) =>
                             <li className = "post" key={keyIndex++}>
-                                <p className = "postTitle">{each.title}</p>
-                                <p className="postUser">{each.user}</p>
+                                <p className = "postTitle">{each.title}<img src = {each.user.profileURL} alt="Profile Pic" height="20" width="20"/></p>
+                                <p className="postUser">{each.user.username}</p>
                                 <p className="postMessage">{each.message}</p>
                             </li>
                         )
