@@ -104,17 +104,21 @@ class Post extends React.Component {
               <input type="file" onChange={this.handleChange}/>
                 <button onClick={this.handleUpload}>Upload Image</button>
                 <img src = {this.state.url} alt="Profile Pic" height="100" width="100"/>
+                <br></br>
                 <button onClick={this.edit}>Edit</button>
                 <form id="profileForm" onSubmit={e=>this.editUser(e)}>
                     <label>Username</label>
+                    <br></br>
                     <input id="profileElement1" defaultValue={this.state.username} onChange= {(e)=>this.setUsername(e)} disabled></input>
-
+                    <br></br>
                     <label>Name</label>
+                    <br></br>
                     <input id="profileElement2"  defaultValue={this.state.name} onChange= {(e)=>this.setName(e)} disabled></input>
-
+                    <br></br>
                     <label>Major</label>
+                    <br></br>
                     <input id="profileElement3" defaultValue={this.state.major} onChange= {(e)=>this.setMajor(e)} disabled></input>
-
+                    <br></br>
                     <button type="submit">Submit</button>
                 </form>
                 <button onClick={this.closeProfile}>Close</button>

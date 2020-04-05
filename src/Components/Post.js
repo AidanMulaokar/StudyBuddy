@@ -55,10 +55,14 @@ class Post extends React.Component {
             <div className = "post" id="Post">
                 <form id="postForm" onSubmit={e=>this.submitPost(e)}>
                     <label><b>Title</b></label>
+                    <br></br>
                     <input type="text" name="title" style={{width:"31%"}} onChange={e => this.setTitle(e)} required/>
+                    <br></br>
 
                     <label><b>Message</b></label>
+                    <br></br>
                     <textarea type="text" name="message" onChange={e => this.setMessage(e)} required/>
+                    <br></br>
 
                     <button type="submit">Post</button>
                     <button type="text" onClick={this.closePostForm}>Close</button>

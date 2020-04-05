@@ -14,8 +14,14 @@ class App extends React.Component {
       posts: [],
       users: [],
       friends: [],
-      backgroundImage: firebaseApp.storage().ref().child('images/resources/GT_Tower.png')
+      backgroundImage: "",
+      profileURL: "",
+      manageOpen: false
     }
+    firebaseApp.storage().ref('images/resources/').child('backgound.jpg').getDownloadURL().then((url => {
+      //console.log(url);
+      this.setState({backgroundImage: url});
+    }));
     //console.log("***" + this.state.user)
 
     //Get all posts 
@@ -30,9 +36,17 @@ class App extends React.Component {
 
   /**TODO: Fix issues with this, temp solution is inefficient */
   updateUser = async (currUser) => {
-    console.log("UPDATE USER");
     //console.log("!!! updating users");
-    this.setState({user: currUser});
+    this.setState({user: currUser,
+    profileURL: currUser.profileURL});
+    console.log("UPDATE USER" + this.state.user);
+
+    if(this.state.user !== null) {
+      await firebaseApp.storage().ref('images/resources/').child('altbackground.png').getDownloadURL().then((url => {
+        console.log("Changing Background")
+        this.setState({backgroundImage: url});
+      }));
+    }
 
     console.log("UPDATE USERS");
      //Want this to cause re-render
@@ -77,7 +91,7 @@ class App extends React.Component {
 
   updateFriends = () => {
     var friendslist = [];
-    console.log(this.state.user.friendsList);
+    //console.log(this.state.user.friendsList);
     this.state.user.friendsList.forEach((friend) => {
       firestore.collection('students').doc(friend).get()
       .then(function(doc) {
@@ -96,16 +110,45 @@ class App extends React.Component {
       this.setState({user: firebaseApp.auth().currentUser});
     })
 
+    await firebaseApp.storage().ref('images/resources/').child('backgound.jpg').getDownloadURL().then((url => {
+      //console.log(url);
+      this.setState({backgroundImage: url});
+    }));
+
     this.signout();
+  }
+
+  openManage = () => {
+    if(document.getElementById("manage")) {
+      document.getElementById("manage").style.display = "block";
+    }
+    this.setState({manageOpen: true});
+  }
+
+  closeManage = () => {
+    if(document.getElementById("manage")) {
+      document.getElementById("manage").style.display = "none";
+    }
+    this.setState({manageOpen: false});
   }
 
   render() {
     //console.log("APP RENDER")
     return(
-      //console.log(this.state.backgroundImage.fullPath),
-      <div id= "main" style={{backgroundImage: 'url('+this.state.backgroundImage.fullPath+')' }}>
+      <div id= "main" style={{backgroundImage: "url(" + this.state.backgroundImage + ")"}}>
+        <div id="header">
+          <p>STUDY BUDDY</p>
+          <div id="userInfo">
+          <p id="username">{this.state.user ? this.state.user.username : ""}</p>
+          <img onClick={this.state.manageOpen ? this.closeManage : this.openManage} src={this.state.profileURL} alt="Profile" width="30" height="30" style={{borderRadius: 15}}></img>
+          </div>
+          <div id="manage">
+            <button onClick={this.openProfile}>Profile</button>
+            <button onClick={this.signOut}>Sign Out</button>
+          </div>
+        </div>
         <Home update={this.updateUser} friends = {this.state.friends} user={this.state.user} users = {this.state.users} signOut={this.signOut} posts = {this.state.posts} openPost = {this.openPost} openProfile = {this.openProfile}/>
-        <Login login = {this.updateUser} openHome = {this.openHome}/>
+        <Login enableUserInfo = {this.enableUserInfo} login = {this.updateUser} openHome = {this.openHome}/>
         <Post user={this.state.user} updatePost = {this.updatePosts}/>
         <Profile user = {this.state.user} updateUser = {this.updateUser}/>
       </div>
@@ -127,6 +170,25 @@ class App extends React.Component {
     if(document.getElementById("loginform")) {
       document.getElementById("loginform").style.display = "block";
     }
+    if(document.getElementById("userInfo")) {
+      document.getElementById("userInfo").style.display = "none";
+    }
+    if(document.getElementById("manage")) {
+      document.getElementById("manage").style.display = "none";
+    }
+    if(document.getElementById("friendsList")) {
+      document.getElementById("friendsList").style.display = "none";
+    }
+    if(document.getElementById("userssList")) {
+      document.getElementById("usersList").style.display = "none";
+    }
+    if(document.getElementById("usersBtn")) {
+      document.getElementById("usersBtn").style.display = "none";
+    }
+    if(document.getElementById("friendsBtn")) {
+      document.getElementById("friendsBtn").style.display = "none";
+    }
+
   }
 
   openHome() {
@@ -164,6 +226,12 @@ class App extends React.Component {
       //console.log("opening post");
       document.getElementById("Profile").style.display = "block";
       //document.getElementById("shadow").style.display = "block";
+    }
+  }
+
+  enableUserInfo() {
+    if(document.getElementById("userInfo")) {
+      document.getElementById("userInfo").style.display = "block";
     }
   }
 }

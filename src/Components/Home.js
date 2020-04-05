@@ -1,6 +1,6 @@
 import React from 'react';
 import '../Css/Home.css';
-import { firestore } from '../Resources/Firebase.js';
+import { firestore, firebaseApp } from '../Resources/Firebase.js';
 //import {firebaseApp} from '../Resources/Firebase.js';
 
 var keyIndex = 0;
@@ -14,8 +14,34 @@ class Home extends React.Component {
             users: this.props.users,
             user: this.props.user,
             friendsList: [],
-            friends: this.props.friends
+            friends: this.props.friends,
+            addBtnSrc: "",
+            addFriendSrc: "",
+            removeBtnSrc:"",
+            removeFriendSrc:"",
+            postIconSrc: ""
+            //defaultImgSrc: ""
         }
+        firebaseApp.storage().ref('images/resources/').child('addBtn.png').getDownloadURL().then((url) => {
+            this.setState({addBtnSrc: url})
+        });
+        firebaseApp.storage().ref('images/resources/').child('addFriend.jpg').getDownloadURL().then((url) => {
+            this.setState({addFriendSrc: url})
+        });
+        firebaseApp.storage().ref('images/resources/').child('removeBtn.png').getDownloadURL().then((url) => {
+            this.setState({removeBtnSrc: url})
+        });
+        firebaseApp.storage().ref('images/resources/').child('removeFriend.png').getDownloadURL().then((url) => {
+            this.setState({removeFriendSrc: url})
+        });
+        firebaseApp.storage().ref('images/resources/').child('postIcon.png').getDownloadURL().then((url) => {
+            this.setState({postIconSrc: url})
+        });
+        /*
+        firebaseApp.storage().ref('images/resources/').child('defaultUser.png').getDownloadURL().then((url) => {
+        this.setState({defaultImgSrc: url});
+        });
+        */
 
     }
 
@@ -114,21 +140,22 @@ class Home extends React.Component {
 
 
     render() {
-        console.log("Home has rerendered");
-        console.log(this.state.users);
-        console.log(this.state.friendsList);
-        console.log(this.state.friends);
+        //console.log("Home has rerendered");
+        //console.log(this.state.users);
+        //console.log(this.state.friendsList);
+        //console.log(this.state.friends);
+
+        //var defaultImage = <img src={this.state.defaultImgSrc } alt="Please Work" height="50" width="50" style={{borderRadius: 25}}></img>
         return(
             <div>
             <div className = "homePage" id="HomePage">
-                <button onClick={this.props.openProfile}>Profile</button>
-                <button onClick={this.props.openPost}>Post</button>
-                <button onClick={this.props.signOut}>Sign Out</button>
+                <div id = "postBtn"><img id= "postImg" src={this.state.postIconSrc} alt="Post" onClick={this.props.openPost} width="30" height="30"></img></div>
+
                 <ul id="posts">
                     {
                         this.state.posts.map( (each) =>
                             <li className = "post" key={keyIndex++}>
-                                <p className = "postTitle">{each.title}<img src = {each.user.profileURL} alt="Profile Pic" height="20" width="20"/></p>
+                                <p className = "postTitle">{each.title}<img src = {each.user.profileURL} alt="Profile Pic" height="20" width="20" style={{borderRadius: 10}}/></p>
                                 <p className="postUser">{each.user.username}</p>
                                 <p className="postMessage">{each.message}</p>
                             </li>
@@ -143,10 +170,8 @@ class Home extends React.Component {
                     {
                         this.state.friends.map( (each) => 
                             <li className = "friend" key={keyIndex++}>
-                                <p className = "friendUsername"><img src = {each.profileURL} alt="Profile Pic" height="50" width="50"/>{each.username}</p>
-                                <p className="friendName">{each.name}</p>
-                                <p className="friendMajor">{each.major}</p>
-                                <button onClick={() => this.removeFriend(each.id)}>Remove Friend</button>
+                                <img src = {each.profileURL} alt="Profile Pic" height="50" width="50" style={{borderRadius: 25}}/><p className="username">{each.username}</p>
+                                <img className="btn" onMouseOver={e => (e.currentTarget.src = this.state.removeFriendSrc)} onMouseOut={e => (e.currentTarget.src = this.state.removeBtnSrc)} onClick={() => this.removeFriend(each.id)} src={this.state.removeBtnSrc} alt="Remove Button" height="20" width="20" style={{borderRadius: 10}}/>
                             </li>
                         )
                     }
@@ -157,10 +182,8 @@ class Home extends React.Component {
                     {
                         this.state.users.map( (each) => 
                             <li className = "user" key={keyIndex++}>
-                                <p className = "userUsername"><img src = {each.profileURL} alt="Profile Pic" height="50" width="50"/>{each.username}</p>
-                                <p className="userName">{each.name}</p>
-                                <p className="userMajor">{each.major}</p>
-                                <button onClick={() => this.addFriend(each.id)}>Add Friend</button>
+                                <img src = {each.profileURL} alt="Profile Pic" height="50" width="50" style={{borderRadius: 25}}/><p className="username">{each.username}</p>
+                                <img className = "btn" onMouseOver={e => (e.currentTarget.src = this.state.addFriendSrc)} onMouseOut={e => (e.currentTarget.src = this.state.addBtnSrc)} onClick={() => this.addFriend(each.id)} src={this.state.addBtnSrc} alt="Add Button" height="20" width="20" style={{borderRadius: 10}}/>
                             </li>
                         )
                     }

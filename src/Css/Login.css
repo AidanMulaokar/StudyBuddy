@@ -1,10 +1,37 @@
 #loginform {
     display: block;
     position: fixed;
-    width: 600px;
-    height: 350px;
-    left: calc(50% - 300px);
-    top: calc(50% - 175px);
+    width: 400px;
+    height: 500px;
+    left: calc(50% - 200px);
+    top: calc(50% - 250px);
+    fill: white;
+    border: 3px solid #f1f1f1;
+    background-color: white;
+    z-index: 9;
+    border-radius: 10px;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+h1 {
+    width: 400px;
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+label {
+    width: 200px;
+    text-align: center;
+}
+
+#registerform {
+    display: none;
+    position: fixed;
+    width: 400px;
+    height: 500px;
+    left: calc(50% - 200px);
+    top: calc(50% - 250px);
     fill: white;
     border: 3px solid #f1f1f1;
     background-color: white;
@@ -12,16 +39,25 @@
     border-radius: 10px;
 }
 
-#registerform {
-    display: none;
-    position: fixed;
-    width: 600px;
-    height: 350px;
-    left: calc(50% - 300px);
-    top: calc(50% - 175px);
-    fill: white;
-    border: 3px solid #f1f1f1;
-    background-color: white;
-    z-index: 9;
-    border-radius: 10px;
+#login {
+    width: 400px;
+    text-align: center;
+}
+
+.loginInfo {
+    width: 200px;
+    margin-bottom: 30px;
+    left: calc(50% - 100px);
+    text-align: center;
+}
+
+.registerInfo {
+    width: 200px;
+    margin-bottom: 10px;
+    left: calc(50% - 100px);
+    text-align: center;
+}
+
+.submit {
+    width: 100px;
 }

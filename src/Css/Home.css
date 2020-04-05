@@ -23,12 +23,12 @@
 .post {
     position: relative;
     display:block;
-    border-bottom: thin solid lightgray;
+    border: thin solid lightgray;
+    border-radius: 3px;
 }
 
 .postTitle {
-    background-color: black;
-    color: white;
+    border-bottom: thin solid lightgray;
     display:block;
 }
 
@@ -103,6 +103,9 @@
     border-radius: 10px;
 }
 
+#usersBtn:hover {
+    background-color: #f1f1f1;
+}
 
 #friendsBtn {
     display: none;
@@ -116,4 +119,46 @@
     background-color: white;
     z-index: 8;
     border-radius: 10px;
+}
+
+#friendsBtn:hover {
+    background-color: #f1f1f1;
+}
+
+#postBtn {
+    position: fixed;
+    width: 50px;
+    height: 50px;
+    left: calc(100% - 450px);
+    top: calc(50% - 200px);
+    z-index: 1;
+    border-radius: 25px;
+    border: 1px solid #f1f1f1;
+    background-color: white;
+}
+
+#postBtn:hover {
+    background-color: #f1f1f1;
+}
+
+#postImg {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    top: 50%;
+    left: 50%;    
+    margin-left: -15px;
+    margin-top: -15px;
+}
+
+.btn {
+    position: absolute;
+    left: calc(100% - 50px);
+    top: calc(30%);
+}
+
+.username {
+    position:absolute;
+    left: calc(100% - 175px);
+    top: calc(0%);
 }
