@@ -148,7 +148,7 @@ class App extends React.Component {
           <p>STUDY BUDDY</p>
           <div id="account">
           <p id="username">{this.state.user ? this.state.user.username : ""}</p>
-          <img onClick={this.state.manageOpen ? this.closeManage : this.openManage} src={this.state.profileURL} alt="Profile" width="30" height="30" style={{borderRadius: 15}}></img>
+          <img onClick={this.state.manageOpen ? this.closeManage : this.openManage} onMouseOver={this.openManage2} onMouseOff={this.closeManage2} src={this.state.profileURL} alt="Profile" width="30" height="30" style={{borderRadius: 15}}></img>
           </div>
           <div id="manage">
             <button onClick={this.openProfile}>Profile</button>
@@ -253,6 +253,17 @@ class App extends React.Component {
   closeExtra() {
     if(document.getElementById("UserInfo")) {
       document.getElementById("UserInfo").style.display = "none";
+    }
+  }
+
+  openManage2() {
+    if(document.getElementById("manage")) {
+      document.getElementById("manage").style.display = "block";
+    }
+  }
+  closeManage2() {
+    if(document.getElementById("manage")) {
+      document.getElementById("manage").style.display = "none";
     }
   }
 }
