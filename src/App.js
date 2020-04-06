@@ -5,6 +5,7 @@ import Post from './Components/Post.js';
 import Profile from './Components/Profile.js'
 import {firestore, firebaseApp} from './Resources/Firebase.js';
 import './App.css';
+import UserInfo from './Components/UserInfo.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -16,7 +17,8 @@ class App extends React.Component {
       friends: [],
       backgroundImage: "",
       profileURL: "",
-      manageOpen: false
+      manageOpen: false,
+      otherUser: null
     }
     firebaseApp.storage().ref('images/resources/').child('backgound.jpg').getDownloadURL().then((url => {
       //console.log(url);
@@ -132,13 +134,19 @@ class App extends React.Component {
     this.setState({manageOpen: false});
   }
 
+  fillUserInfo = (user) => {
+    console.log(user);
+    this.setState({otherUser: user});
+    this.openUserInfo();
+  }
+
   render() {
     //console.log("APP RENDER")
     return(
-      <div id= "main" style={{backgroundImage: "url(" + this.state.backgroundImage + ")"}}>
+      <div id= "main" style={{backgroundImage: "url(" + this.state.backgroundImage + ")"}} onClick={this.closeExtra}>
         <div id="header">
           <p>STUDY BUDDY</p>
-          <div id="userInfo">
+          <div id="account">
           <p id="username">{this.state.user ? this.state.user.username : ""}</p>
           <img onClick={this.state.manageOpen ? this.closeManage : this.openManage} src={this.state.profileURL} alt="Profile" width="30" height="30" style={{borderRadius: 15}}></img>
           </div>
@@ -147,10 +155,11 @@ class App extends React.Component {
             <button onClick={this.signOut}>Sign Out</button>
           </div>
         </div>
-        <Home update={this.updateUser} friends = {this.state.friends} user={this.state.user} users = {this.state.users} signOut={this.signOut} posts = {this.state.posts} openPost = {this.openPost} openProfile = {this.openProfile}/>
-        <Login enableUserInfo = {this.enableUserInfo} login = {this.updateUser} openHome = {this.openHome}/>
+        <Home fillInfo = {this.fillUserInfo} update={this.updateUser} friends = {this.state.friends} user={this.state.user} users = {this.state.users} signOut={this.signOut} posts = {this.state.posts} openPost = {this.openPost} openProfile = {this.openProfile}/>
+        <Login enableUserInfo = {this.enableAccount} login = {this.updateUser} openHome = {this.openHome}/>
         <Post user={this.state.user} updatePost = {this.updatePosts}/>
         <Profile user = {this.state.user} updateUser = {this.updateUser}/>
+        <UserInfo user = {this.state.otherUser}></UserInfo>
       </div>
 
     )
@@ -229,12 +238,26 @@ class App extends React.Component {
     }
   }
 
-  enableUserInfo() {
-    if(document.getElementById("userInfo")) {
-      document.getElementById("userInfo").style.display = "block";
+  enableAccount() {
+    if(document.getElementById("account")) {
+      document.getElementById("account").style.display = "block";
+    }
+  }
+
+  openUserInfo() {
+    if(document.getElementById("UserInfo")) {
+      document.getElementById("UserInfo").style.display = "block";
+    }
+  }
+
+  closeExtra() {
+    if(document.getElementById("UserInfo")) {
+      document.getElementById("UserInfo").style.display = "none";
     }
   }
 }
+
+
 
 function closeLogin() {
   if(document.getElementById("loginform")) {

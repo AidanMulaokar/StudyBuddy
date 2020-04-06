@@ -1,0 +1,18 @@
+#UserInfo {
+    display: none;
+    position: fixed;
+    width: 300px;
+    height: 100px;
+    left: calc(50% + 370px);
+    top: calc(50% - 340px);
+    fill: white;
+    border: 3px solid #f1f1f1;
+    background-color: white;
+    z-index: 9;
+    border-radius: 10px;
+    text-align: center;
+}
+
+#UserInfo span {
+    margin-right: 10px;
+}

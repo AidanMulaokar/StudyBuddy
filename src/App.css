@@ -45,7 +45,7 @@
   display: block;
 }
 
-#userInfo {
+#account {
   display: none;
   position: absolute;
   left: calc(100% - 50px);
@@ -53,7 +53,7 @@
   color: white;
 }
 
-#userInfo #username {
+#account #username {
   position: absolute;
   font-size: 15px;
   left: calc(100% - 130px);

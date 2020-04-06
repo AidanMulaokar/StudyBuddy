@@ -138,6 +138,16 @@ class Home extends React.Component {
 
     }
 
+    fill = async (event) => {
+        event.preventDefault();
+        await firestore.collection('students').doc(event.target.id).get().then((doc) => {
+            if(doc.exists) {
+                this.props.fillInfo(doc.data());
+            }
+        });
+
+    }
+
 
     render() {
         //console.log("Home has rerendered");
@@ -169,9 +179,9 @@ class Home extends React.Component {
             <ul id="friends">
                     {
                         this.state.friends.map( (each) => 
-                            <li className = "friend" key={keyIndex++}>
-                                <img src = {each.profileURL} alt="Profile Pic" height="50" width="50" style={{borderRadius: 25}}/><p className="username">{each.username}</p>
-                                <img className="btn" onMouseOver={e => (e.currentTarget.src = this.state.removeFriendSrc)} onMouseOut={e => (e.currentTarget.src = this.state.removeBtnSrc)} onClick={() => this.removeFriend(each.id)} src={this.state.removeBtnSrc} alt="Remove Button" height="20" width="20" style={{borderRadius: 10}}/>
+                            <li onClick={this.fill.bind(this)} className = "friend" key={each.id} id={each.id}>
+                                <img id={each.id} src = {each.profileURL} alt="Profile Pic" height="50" width="50" style={{borderRadius: 25}}/><p id={each.id} className="username">{each.username}</p>
+                                <img id={each.id} className="btn" onMouseOver={e => (e.currentTarget.src = this.state.removeFriendSrc)} onMouseOut={e => (e.currentTarget.src = this.state.removeBtnSrc)} onClick={() => this.removeFriend(each.id)} src={this.state.removeBtnSrc} alt="Remove Button" height="20" width="20" style={{borderRadius: 10}}/>
                             </li>
                         )
                     }
@@ -181,7 +191,7 @@ class Home extends React.Component {
             <ul id="users">
                     {
                         this.state.users.map( (each) => 
-                            <li className = "user" key={keyIndex++}>
+                            <li onClick={this.fill.bind(this)} className = "user" key={each.id} id={each.id}>
                                 <img src = {each.profileURL} alt="Profile Pic" height="50" width="50" style={{borderRadius: 25}}/><p className="username">{each.username}</p>
                                 <img className = "btn" onMouseOver={e => (e.currentTarget.src = this.state.addFriendSrc)} onMouseOut={e => (e.currentTarget.src = this.state.addBtnSrc)} onClick={() => this.addFriend(each.id)} src={this.state.addBtnSrc} alt="Add Button" height="20" width="20" style={{borderRadius: 10}}/>
                             </li>

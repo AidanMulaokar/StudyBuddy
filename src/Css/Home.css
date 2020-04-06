@@ -68,12 +68,20 @@
     overflow-y: scroll;
 }
 
+#friends li:hover {
+    background-color: #f1f1f1;
+}
+
 #users {
     list-style: none;
     width: 250px;
     height: 300px;
     overflow: hidden;
     overflow-y: scroll;
+}
+
+#users li:hover {
+    background-color: #f1f1f1;
 }
 
 .friend {
