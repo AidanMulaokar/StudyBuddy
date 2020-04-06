@@ -197,6 +197,9 @@ class App extends React.Component {
     if(document.getElementById("friendsBtn")) {
       document.getElementById("friendsBtn").style.display = "none";
     }
+    if(document.getElementById("account")) {
+      document.getElementById("account").style.display = "none";
+    }
 
   }
 
