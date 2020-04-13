@@ -17,12 +17,18 @@ class App extends React.Component {
       friends: [],
       backgroundImage: "",
       profileURL: "",
+      logo: "",
       manageOpen: false,
       otherUser: null
     }
     firebaseApp.storage().ref('images/resources/').child('backgound.jpg').getDownloadURL().then((url => {
       //console.log(url);
       this.setState({backgroundImage: url});
+    }));
+
+    firebaseApp.storage().ref('images/resources/').child('StudyBuddyLogo.PNG').getDownloadURL().then((url => {
+      //console.log(url);
+      this.setState({logo: url});
     }));
     //console.log("***" + this.state.user)
 
@@ -145,7 +151,7 @@ class App extends React.Component {
     return(
       <div id= "main" style={{backgroundImage: "url(" + this.state.backgroundImage + ")"}} onClick={this.closeExtra}>
         <div id="header">
-          <p>STUDY BUDDY</p>
+          <img src={ this.state.logo } alt="Study Buddy Logo; isn't it cool?" width="20%" height="100%" />
           <div id="account">
           <p id="username">{this.state.user ? this.state.user.username : ""}</p>
           <img onClick={this.state.manageOpen ? this.closeManage : this.openManage} /*onMouseOver={this.openManage2} onMouseOut={this.closeManage2}*/ src={this.state.profileURL} alt="Profile" width="30" height="30" style={{borderRadius: 15}}></img>
