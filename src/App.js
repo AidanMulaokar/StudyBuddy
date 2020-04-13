@@ -18,6 +18,7 @@ class App extends React.Component {
       backgroundImage: "",
       profileURL: "",
       logo: "",
+      noteBackground: "",
       manageOpen: false,
       otherUser: null
     }
@@ -29,6 +30,10 @@ class App extends React.Component {
     firebaseApp.storage().ref('images/resources/').child('StudyBuddyLogo.PNG').getDownloadURL().then((url => {
       //console.log(url);
       this.setState({logo: url});
+    }));
+    firebaseApp.storage().ref('images/resources/').child('notebookBackground.PNG').getDownloadURL().then((url => {
+      //console.log(url);
+      this.setState({noteBackground: url});
     }));
     //console.log("***" + this.state.user)
 
@@ -50,7 +55,7 @@ class App extends React.Component {
     console.log("UPDATE USER" + this.state.user);
 
     if(this.state.user !== null) {
-      await firebaseApp.storage().ref('images/resources/').child('altbackground.png').getDownloadURL().then((url => {
+      await firebaseApp.storage().ref('images/resources/').child('corkboard.jpg').getDownloadURL().then((url => {
         console.log("Changing Background")
         this.setState({backgroundImage: url});
       }));
