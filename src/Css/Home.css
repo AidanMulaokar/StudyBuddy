@@ -1,10 +1,10 @@
 #HomePage {
     display: none;
     position: fixed;
-    width: 600px;
-    height: 350px;
-    left: calc(50% - 300px);
-    top: calc(50% - 175px);
+    width: calc(50%);
+    height: calc(75%);
+    left: calc(25% - 300px);
+    top: calc(25% - 175px);
     fill: white;
     border: 3px solid #f1f1f1;
     background-color: white;
@@ -14,8 +14,8 @@
 
 #posts {
     list-style: none;
-    width: 550px;
-    height: 300px;
+    width: calc(90%);
+    height: calc(90%);
     overflow: hidden;
     overflow-y: scroll;
 }
