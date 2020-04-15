@@ -2,6 +2,7 @@ import React from 'react';
 import '../Css/Profile.css';
 import {firestore, firebaseApp} from '../Resources/Firebase.js';
 
+var keyIndex = 0;
 class Post extends React.Component {
     constructor(props) {
         super(props);
@@ -12,7 +13,8 @@ class Post extends React.Component {
             disabled: true,
             username: null,
             name: null,
-            major: null
+            major: null,
+            posts: [],
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleUpload = this.handleUpload.bind(this);
@@ -21,24 +23,46 @@ class Post extends React.Component {
 
     static getDerivedStateFromProps(props, state) {
         if (props.user && state.user && props.user.id !== state.user.id) {
-            //console.log(props.user.id);
+            console.log(props.user.id);
+            var userPosts = [];
+            /** 
+            firestore.collection('students').doc(props.user.id).collection('posts').get()
+            .then((snapshot) => {
+                snapshot.docs.forEach( doc => {
+                    //console.log(doc.data())
+                    userPosts.push(doc.data())
+                })
+            });
+            */
+            console.log("USER POSTS" + userPosts)
             return {
                     user: props.user,
                     url: props.user.profileURL,
                     username: props.user.username,
                     name: props.user.name,
                     major: props.user.major,
-                    disabled: true
+                    disabled: true,
+                    posts: userPosts
             };
         } else if (props.user && !state.user){
-            //console.log(props.user.id);
+            console.log(props.user.id);
+            userPosts=[];
+            firestore.collection('students').doc(props.user.id).collection('posts').get()
+            .then((snapshot) => {
+                snapshot.docs.forEach( doc => {
+                    //console.log(doc.data())
+                    userPosts.push(doc.data())
+                })
+            });
+            console.log("USER POSTS" + userPosts)
             return {
                 user: props.user,
                 url: props.user.profileURL,
                 username: props.user.username,
                 name: props.user.name,
                 major: props.user.major,
-                disabled: true
+                disabled: true,
+                posts: userPosts
             };
         }
         return null;
@@ -101,26 +125,32 @@ class Post extends React.Component {
         //console.log(this.state.username);
         return(
             <div className = "profile" id="Profile">
+              <img src = {this.state.url} alt="Profile Pic" height="100" width="100"/>
+              <br></br>
               <input type="file" onChange={this.handleChange}/>
                 <button onClick={this.handleUpload}>Upload Image</button>
-                <img src = {this.state.url} alt="Profile Pic" height="100" width="100"/>
                 <br></br>
                 <button onClick={this.edit}>Edit</button>
                 <form id="profileForm" onSubmit={e=>this.editUser(e)}>
                     <label>Username</label>
-                    <br></br>
                     <input id="profileElement1" defaultValue={this.state.username} onChange= {(e)=>this.setUsername(e)} disabled></input>
-                    <br></br>
                     <label>Name</label>
-                    <br></br>
                     <input id="profileElement2"  defaultValue={this.state.name} onChange= {(e)=>this.setName(e)} disabled></input>
-                    <br></br>
                     <label>Major</label>
-                    <br></br>
                     <input id="profileElement3" defaultValue={this.state.major} onChange= {(e)=>this.setMajor(e)} disabled></input>
-                    <br></br>
                     <button type="submit">Submit</button>
                 </form>
+                <ul className="currentPosts">
+                    {
+                        this.state.posts.map( (each) =>
+                            <li className = "post" key={keyIndex++}>
+                                <p className = "postTitle"><img src = {each.user.profileURL} alt="Profile Pic" height="20" width="20" style={{borderRadius: 10}}/>{each.title}</p>
+                                <p className="postUser">{each.user.username}</p>
+                                <p className="postMessage">{each.message}</p>
+                            </li>
+                        )
+                    }
+                </ul>
                 <button onClick={this.closeProfile}>Close</button>
             </div>
             

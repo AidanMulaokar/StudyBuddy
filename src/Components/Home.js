@@ -194,9 +194,9 @@ class Home extends React.Component {
         //var defaultImage = <img src={this.state.defaultImgSrc } alt="Please Work" height="50" width="50" style={{borderRadius: 25}}></img>
         return(
             <div>
-            <div id = "postBtn"><img id= "postImg" src={this.state.postIconSrc} alt="Post" onClick={this.props.openPost} width="30" height="30"></img></div>
-            <div id="friendsPosts">
 
+            <div id="friendsPosts">
+                <div id = "postBtn"><img id= "postImg" src={this.state.postIconSrc} alt="Post" onClick={this.props.openPost} width="30" height="30"></img></div>
                 <ul className="posts">
                     {
                         this.state.friendsPosts.map( (each) =>
@@ -210,7 +210,7 @@ class Home extends React.Component {
                 </ul>
             </div>
             <div id="usersPosts">
-
+                <div id = "postBtn"><img id= "postImg" src={this.state.postIconSrc} alt="Post" onClick={this.props.openPost} width="30" height="30"></img></div>
                 <ul className="posts">
                     {
                         this.state.usersPosts.map( (each) =>
