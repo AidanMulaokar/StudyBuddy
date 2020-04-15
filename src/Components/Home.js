@@ -19,7 +19,9 @@ class Home extends React.Component {
             addFriendSrc: "",
             removeBtnSrc:"",
             removeFriendSrc:"",
-            postIconSrc: ""
+            postIconSrc: "",
+            friendsPosts: [],
+            usersPosts: []
             //defaultImgSrc: ""
         }
         firebaseApp.storage().ref('images/resources/').child('addBtn.png').getDownloadURL().then((url) => {
@@ -42,7 +44,6 @@ class Home extends React.Component {
         this.setState({defaultImgSrc: url});
         });
         */
-
     }
 
     static getDerivedStateFromProps(props, state) {
@@ -61,12 +62,34 @@ class Home extends React.Component {
                     notFriends.push(user);
                 }
             })
+
+            var friendsposts = [];
+            var usersposts = [];
+    
+            props.posts.forEach( (post) => {
+                var isFriend = false;
+                props.friends.forEach( (friend) => {
+                    console.log(post.user.id + " == " + friend.id)
+                    if(post.user.id === friend.id) {
+                        isFriend = true;
+                        friendsposts.push(post);
+                    }
+                });
+                if (!isFriend) {
+                    usersposts.push(post);
+                }
+            });
+
+            console.log(friendsposts);
             return {
                     posts: props.posts,
                     users: notFriends,
                     user: props.user,
                     friendsList: props.user.friendsList,
-                    friends: props.friends
+                    friends: props.friends,
+                    friendsPosts: friendsposts,
+                    usersPosts: usersposts
+
             };
         } else if (props.posts && !state.posts){
             //console.log(props.posts);
@@ -83,12 +106,25 @@ class Home extends React.Component {
                     notFriends.push(user);
                 }
             })
+
+            props.posts.forEach( (post) => {
+                props.friends.forEach( (friend) => {
+                    if(post.user.id === friend.id) {
+                        friendsposts.push(post);
+                    } else {
+                        usersposts.push(post);
+                    }
+                })
+            });
+            console.log(friendsposts);
             return {
                 posts: props.posts,
                 users: notFriends,
                 user: props.user,
                 friendsList: props.user.friendsList,
-                friends: props.friends
+                friends: props.friends,
+                friendsPosts: friendsposts,
+                usersPosts: usersposts
             };
         }
         return null;
@@ -158,14 +194,43 @@ class Home extends React.Component {
         //var defaultImage = <img src={this.state.defaultImgSrc } alt="Please Work" height="50" width="50" style={{borderRadius: 25}}></img>
         return(
             <div>
+            <div id = "postBtn"><img id= "postImg" src={this.state.postIconSrc} alt="Post" onClick={this.props.openPost} width="30" height="30"></img></div>
+            <div id="friendsPosts">
+
+                <ul className="posts">
+                    {
+                        this.state.friendsPosts.map( (each) =>
+                            <li className = "post" key={keyIndex++}>
+                                <p className = "postTitle"><img src = {each.user.profileURL} alt="Profile Pic" height="20" width="20" style={{borderRadius: 10}}/>{each.title}</p>
+                                <p className="postUser">{each.user.username}</p>
+                                <p className="postMessage">{each.message}</p>
+                            </li>
+                        )
+                    }
+                </ul>
+            </div>
+            <div id="usersPosts">
+
+                <ul className="posts">
+                    {
+                        this.state.usersPosts.map( (each) =>
+                            <li className = "post" key={keyIndex++}>
+                                <p className = "postTitle"><img src = {each.user.profileURL} alt="Profile Pic" height="20" width="20" style={{borderRadius: 10}}/>{each.title}</p>
+                                <p className="postUser">{each.user.username}</p>
+                                <p className="postMessage">{each.message}</p>
+                            </li>
+                        )
+                    }
+                </ul>
+            </div>
             <div className = "homePage" id="HomePage">
                 <div id = "postBtn"><img id= "postImg" src={this.state.postIconSrc} alt="Post" onClick={this.props.openPost} width="30" height="30"></img></div>
 
-                <ul id="posts">
+                <ul className="posts" id="friendsPosts">
                     {
                         this.state.posts.map( (each) =>
                             <li className = "post" key={keyIndex++}>
-                                <p className = "postTitle">{each.title}<img src = {each.user.profileURL} alt="Profile Pic" height="20" width="20" style={{borderRadius: 10}}/></p>
+                                <p className = "postTitle"><img src = {each.user.profileURL} alt="Profile Pic" height="20" width="20" style={{borderRadius: 10}}/>{each.title}</p>
                                 <p className="postUser">{each.user.username}</p>
                                 <p className="postMessage">{each.message}</p>
                             </li>
@@ -205,11 +270,15 @@ class Home extends React.Component {
     openFriends() {
         document.getElementById("usersList").style.display = "none";
         document.getElementById("friendsList").display = "block";
+        document.getElementById("usersPosts").style.display = "none";
+        document.getElementById("friendsPosts").display = "block";
     }
 
     openUsers() {
         document.getElementById("usersList").style.display = "block";
         document.getElementById("friendsList").display = "none";
+        document.getElementById("usersPosts").style.display = "block";
+        document.getElementById("friendsPosts").display = "none";
     }
 }
 export default Home;

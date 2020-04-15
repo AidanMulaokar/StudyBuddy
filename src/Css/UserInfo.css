@@ -1,18 +1,37 @@
 #UserInfo {
     display: none;
     position: fixed;
-    width: 300px;
-    height: 100px;
-    left: calc(50% + 370px);
-    top: calc(50% - 340px);
+    width: 600px;
+    height: 350px;
+    left: calc(50% - 300px);
+    top: calc(50% - 175px);
     fill: white;
     border: 3px solid #f1f1f1;
     background-color: white;
-    z-index: 9;
+    z-index: 11;
     border-radius: 10px;
-    text-align: center;
 }
 
 #UserInfo span {
     margin-right: 10px;
+}
+
+#posts {
+    list-style: none;
+    width: 550px;
+    height: 300px;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+.post {
+    position: relative;
+    display:block;
+    border: thin solid lightgray;
+    border-radius: 3px;
+}
+
+.postTitle {
+    border-bottom: thin solid lightgray;
+    display:block;
 }

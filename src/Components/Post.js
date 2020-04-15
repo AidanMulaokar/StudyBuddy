@@ -46,6 +46,7 @@ class Post extends React.Component {
             user: this.state.user,
         }
         firestore.collection('posts').add(post);
+        firestore.collection('students').doc(this.state.user.id).collection('posts').add(post);
         this.props.updatePost();
         this.closePostForm();
     }

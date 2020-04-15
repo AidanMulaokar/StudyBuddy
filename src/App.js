@@ -216,9 +216,9 @@ class App extends React.Component {
 
   openHome() {
     //console.log("Open Home");
-    if(document.getElementById("HomePage")) {
+    if(document.getElementById("friendsPosts")) {
       //console.log("opening home");
-      document.getElementById("HomePage").style.display = "block";
+      document.getElementById("friendsPosts").style.display = "block";
       //document.getElementById("shadow").style.display = "block";
     }
     if(document.getElementById("friendsList")) {
